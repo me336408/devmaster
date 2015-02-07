@@ -52,7 +52,7 @@ projects[jquery_update][version] = "2.5"
 ; @TODO: Move devshop_hosting these into devmaster
 projects[devshop_hosting][subdir] = devshop
 projects[devshop_hosting][download][type] = git
-projects[devshop_hosting][download][branch] = 7.x-2.x
+projects[devshop_hosting][download][branch] = 7.x-1.x
 
 ; Modules - Temporary
 
