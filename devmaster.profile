@@ -14,7 +14,7 @@ function devmaster_install() {
 
   // add support for nginx
   if (d()->platform->server->http_service_type === 'nginx') {
-    drupal_install_modules(array('hosting_nginx'));
+    module_enable(array('hosting_nginx'));
   }
 
   // Bootstrap and create all the initial nodes
