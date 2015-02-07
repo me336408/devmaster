@@ -15,17 +15,8 @@ defaults[projects][type] = "module"
 projects[hosting][subdir] = aegir
 projects[hosting][version] = 3.x
 
-projects[aegir_tour][subdir] = aegir
-projects[aegir_tour][version] = 3.x
-
-projects[hosting_advanced_cron][subdir] = aegir
-projects[hosting_advanced_cron][version] = 3.x
-
 projects[hosting_git][subdir] = aegir
 projects[hosting_git][version] = 3.x
-
-projects[hosting_platform_pathauto][subdir] = aegir
-projects[hosting_platform_pathauto][version] = 2.x
 
 projects[hosting_remote_import][subdir] = aegir
 projects[hosting_remote_import][version] = 3.x
@@ -39,11 +30,11 @@ projects[hosting_tasks_extra][version] = 3.x
 projects[hosting_filemanager][subdir] = aegir
 projects[hosting_filemanager][version] = 1.x
 
-projects[hosting_solr][subdir] = aegir
-projects[hosting_solr][version] = 1.x
+;projects[hosting_solr][subdir] = aegir
+;projects[hosting_solr][version] = 1.x
 
-projects[hosting_logs][subdir] = aegir
-projects[hosting_logs][version] = 1.x
+;projects[hosting_logs][subdir] = aegir
+;projects[hosting_logs][version] = 1.x
 
 ; Contrib
 projects[admin_menu][version] = "3.0-rc5"
