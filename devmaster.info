@@ -11,6 +11,7 @@ dependencies[] = toolbar
 
 ; Drupal Contrib
 dependencies[] = admin_menu
+dependencies[] = admin_menu_toolbar
 dependencies[] = betterlogin
 dependencies[] = overlay_paths
 dependencies[] = views
