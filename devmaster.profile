@@ -25,11 +25,6 @@ function devmaster_install() {
 }
 
 function devmaster_bootstrap() {
-  /* Default node types and default node */
-  $types =  node_types_rebuild();
-
-  // Initialize the hosting defines
-  hosting_init();
 
   /* Default client */
   $node = new stdClass();
