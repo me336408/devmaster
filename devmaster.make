@@ -38,6 +38,7 @@ projects[hosting_filemanager][version] = 1.x
 
 ; Contrib
 projects[admin_menu][version] = "3.0-rc5"
+projects[adminrole][version] = "1.0"
 projects[betterlogin][version] = 1.2
 projects[bootstrap_tour][version] = 1.0-beta8
 projects[ctools][version] = "1.6"
