@@ -1,80 +1,71 @@
-core = 6.x
+;
+; Builds the DevShop front end: DevMaster
+;
+; This makefile is included remotely by the devshop installer.
+;
+core = 7.x
 api = 2
 
 projects[drupal][type] = "core"
 
-; this makefile will make sure we get the development code from the
-; aegir modules instead of the tagged releases
-includes[devshop] = "drupal-org.make"
+defaults[projects][subdir] = "contrib"
+defaults[projects][type] = "module"
 
 ; Aegir Modules
-projects[hosting][download][type] = 'git'
-projects[hosting][download][url] = 'http://git.drupal.org/project/hosting.git'
-projects[hosting][download][branch] = '6.x-2.x'
+projects[hosting][subdir] = aegir
+projects[hosting][version] = 3.x
 
-projects[hosting_platform_pathauto][version] = "2.1"
-projects[hosting_platform_pathauto][subdir] = contrib
+projects[aegir_tour][subdir] = aegir
+projects[aegir_tour][version] = 3.x
 
-projects[admin_menu][version] = "1.8"
-projects[admin_menu][subdir] = contrib
+projects[hosting_advanced_cron][subdir] = aegir
+projects[hosting_advanced_cron][version] = 3.x
 
-projects[openidadmin][version] = "1.2"
-projects[openidadmin][subdir] = contrib
+projects[hosting_git][subdir] = aegir
+projects[hosting_git][version] = 3.x
 
-projects[install_profile_api][version] = "2.2"
-projects[install_profile_api][subdir] = contrib
+projects[hosting_platform_pathauto][subdir] = aegir
+projects[hosting_platform_pathauto][version] = 2.x
 
-projects[jquery_ui][version] = "1.5"
-projects[jquery_ui][subdir] = contrib
+projects[hosting_remote_import][subdir] = aegir
+projects[hosting_remote_import][version] = 3.x
 
-projects[jquery_update][version] = "2.0-alpha1"
-projects[jquery_update][subdir] = contrib
+projects[hosting_site_backup_manager][subdir] = aegir
+projects[hosting_site_backup_manager][version] = 3.x
 
-projects[modalframe][version] = "1.9"
-projects[modalframe][subdir] = contrib
+projects[hosting_tasks_extra][subdir] = aegir
+projects[hosting_tasks_extra][version] = 3.x
 
-projects[views][version] = "3.0"
-projects[views][subdir] = contrib
+projects[hosting_filemanager][subdir] = aegir
+projects[hosting_filemanager][version] = 1.x
 
-projects[views_bulk_operations][version] = "1.16"
-projects[views_bulk_operations][subdir] = contrib
+projects[hosting_solr][subdir] = aegir
+projects[hosting_solr][version] = 1.x
 
-projects[ctools][version] = "1.11"
-projects[ctools][subdir] = contrib
+projects[hosting_logs][subdir] = aegir
+projects[hosting_logs][version] = 1.x
 
-; Libraries
-libraries[jquery_ui][download][type] = "get"
-libraries[jquery_ui][destination] = "modules/contrib/jquery_ui"
-libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery-ui-1.7.3.zip"
-libraries[jquery_ui][directory_name] = "jquery.ui"
+; Contrib
+projects[admin_menu][version] = "3.0-rc5"
+projects[betterlogin][version] = 1.2
+projects[bootstrap_tour][version] = 1.0-beta8
+projects[ctools][version] = "1.6"
+projects[entity][version] = 1.5
+projects[openidadmin][version] = "1.0"
+projects[overlay_paths][version] = 1.3
+projects[views][version] = "3.8"
+projects[views_bulk_operations][version] = "3.2"
+projects[jquery_update][version] = "2.5"
 
 ; DevShop modules
+; @TODO: Move devshop_hosting these into devmaster
 projects[devshop_hosting][subdir] = devshop
 projects[devshop_hosting][download][type] = git
-projects[devshop_hosting][download][branch] = 6.x-2.x
+projects[devshop_hosting][download][branch] = 7.x-2.x
 
-; Contrib modules
-projects[adminrole][subdir] = contrib
-projects[ctools][subdir] = contrib
-projects[jquery_update][subdir] = contrib
+; Modules - Temporary
 
-; Aegir Contrib
-projects[hosting_filemanager][subdir] = contrib
-projects[hosting_tasks_extra][subdir] = contrib
-
-; Aegir Contrib maintained by devshop maintainers
-projects[hosting_solr][subdir] = contrib
-projects[hosting_solr][download][type] = git
-projects[hosting_solr][download][branch] = 6.x-1.x
-
-projects[hosting_drush_aliases][subdir] = contrib
-projects[hosting_drush_aliases][download][type] = git
-projects[hosting_drush_aliases][download][branch] = 6.x-1.x
-
-projects[hosting_logs][subdir] = contrib
-projects[hosting_logs][download][type] = git
-projects[hosting_logs][download][branch] = 6.x-1.x
-
-projects[hosting_site_backup_manager][subdir] = contrib
-projects[hosting_site_backup_manager][download][type] = git
-projects[hosting_site_backup_manager][download][branch] = 6.x-2.x
+; Add devel while we're in the 7.x-3.x dev cycle;
+; enabled in hostmaster.info.
+projects[devel][subdir] = developer
+projects[devel_debug_log][subdir] = developer
