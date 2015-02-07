@@ -6,65 +6,11 @@
  */
 
 /**
- * Return an array of the modules to be enabled when this profile is installed.
- *
- * @return
- *  An array of modules to be enabled.
+ * Implements hook_install()
  */
-function devmaster_profile_modules() {
-  return array(
-    /* core */ 'block', 'color', 'filter', 'help', 'menu', 'node', 'system', 'user', 'update',
-    /* aegir contrib */ 'hosting', 'hosting_task', 'hosting_client', 'hosting_db_server', 'hosting_package', 'hosting_platform', 'hosting_site', 'hosting_web_server', 'hosting_server', 'hosting_clone', 'hosting_cron', 'hosting_migrate', 'hosting_alias', 'hosting_queued', 'hosting_http_basic_auth', 'hosting_sync',
+function devmaster_install() {
 
-    /* other contrib */
-    'install_profile_api',
-    'jquery_ui',
-    'jquery_update',
-    'modalframe',
-    'admin_menu',
-    'views',
-    'views_bulk_operations',
-    'actions_permissions',
-    'hosting_platform_pathauto',
-
-    /* DEVSHOP Contrib */
-    'adminrole',
-    'ctools',
-
-    /* DEVSHOP */
-    'devshop_hosting',
-    'devshop_projects',
-    'devshop_log',
-    'devshop_pull',
-
-    /* NICEITIES */
-    'hosting_drush_aliases',
-    'hosting_filemanager',
-    'hosting_logs',
-    'hosting_tasks_extra',
-    'hosting_backup_queue',
-    'hosting_site_backup_manager',
-  );
-}
-
-/**
- * Return a description of the profile for the initial installation screen.
- *
- * @return
- *   An array with keys 'name' and 'description' describing this profile.
- */
-function devmaster_profile_details() {
-  return array(
-    'name' => 'Devmaster',
-    'description' => 'The DevShop front-end.'
-  );
-}
-/**
- * Implements hook_profile_tasks
- */
-function devmaster_profile_tasks(&$task, $url) {
-  // Install dependencies
-  install_include(devmaster_profile_modules());
+  variable_set('install_profile', 'devmaster');
 
   // add support for nginx
   if (d()->platform->server->http_service_type === 'nginx') {
@@ -82,7 +28,6 @@ function devmaster_bootstrap() {
   /* Default node types and default node */
   $types =  node_types_rebuild();
 
-  variable_set('install_profile', 'devmaster');
   // Initialize the hosting defines
   hosting_init();
 
@@ -151,12 +96,15 @@ function devmaster_bootstrap() {
   variable_set('hosting_default_db_server', $db_node->nid);
   variable_set('hosting_own_db_server', $db_node->nid);
 
+  // Create the hostmaster platform & packages
   $node = new stdClass();
   $node->uid = 1;
   $node->title = 'Drupal';
   $node->type = 'package';
   $node->package_type = 'platform';
   $node->short_name = 'drupal';
+  $node->old_short_name = 'drupal';
+  $node->description = 'Drupal code-base.';
   $node->status = 1;
   node_save($node);
   $package_id = $node->nid;
@@ -167,8 +115,12 @@ function devmaster_bootstrap() {
   $node->type = 'platform';
   $node->title = 'hostmaster';
   $node->publish_path = d()->root;
+  $node->makefile = '';
+  $node->verified = 1;
   $node->web_server = variable_get('hosting_default_web_server', 2);
+  $node->platform_status = 1;
   $node->status = 1;
+  $node->make_working_copy = 0;
   node_save($node);
   $platform_id = $node->nid;
   variable_set('hosting_own_platform', $node->nid);
@@ -176,9 +128,12 @@ function devmaster_bootstrap() {
   $instance = new stdClass();
   $instance->rid = $node->nid;
   $instance->version = VERSION;
-  $instance->schema_version = drupal_get_installed_schema_version('system');
+  $instance->schema_version = drupal_get_installed_schema_version('system'); $instance->filename = '';
+  $instance->version_code = 1;
+  $instance->schema_version = 0;
   $instance->package_id = $package_id;
   $instance->status = 0;
+  $instance->platform = $platform_id;
   hosting_package_instance_save($instance);
 
   // Create the hostmaster profile node
@@ -186,12 +141,25 @@ function devmaster_bootstrap() {
   $node->uid = 1;
   $node->title = 'devmaster';
   $node->type = 'package';
+  $node->old_short_name = 'hostmaster';
+  $node->description = 'The Hostmaster profile.';
   $node->package_type = 'profile';
   $node->short_name = 'devmaster';
   $node->status = 1;
   node_save($node);
-
   $profile_id = $node->nid;
+
+  $instance = new stdClass();
+  $instance->rid = $node->nid;
+  $instance->version = VERSION;
+  $instance->filename = '';
+  $instance->version_code = 1;
+  //$instance->schema_version = drupal_get_installed_schema_version('system');
+  $instance->schema_version = 0;
+  $instance->package_id = $profile_id;
+  $instance->status = 0;
+  $instance->platform = $platform_id;
+  hosting_package_instance_save($instance);
 
   // Create the main Aegir site node
   $node = new stdClass();
@@ -200,10 +168,13 @@ function devmaster_bootstrap() {
   $node->title = d()->uri;
   $node->platform = $platform_id;
   $node->client = $client_id;
+  $node->db_name = '';
   $node->db_server = $db_node->nid;
   $node->profile = $profile_id;
   $node->import = true;
   $node->hosting_name = 'hostmaster';
+  $node->site_status = 1;
+  $node->verified = 1;
   $node->status = 1;
   node_save($node);
 
@@ -219,9 +190,14 @@ function devmaster_bootstrap() {
   // This is saved because the config generation script is running via drush, and does not have access to this value
   variable_set('install_url' , $GLOBALS['base_url']);
 
-  // Disable backup queue for sites by default.
-  variable_set('hosting_backup_queue_default_enabled', 0);
+  // enable the betterlogin private site functionality
+  variable_set('betterlogin_private', 1);
 
+  // Disable backup queue for sites by default.
+  // variable_set('hosting_backup_queue_default_enabled', 0);
+
+  // This is saved because the config generation script is running via drush, and does not have access to this value
+  variable_set('install_url' , $GLOBALS['base_url']);
 }
 
 function devmaster_task_finalize() {
@@ -231,56 +207,56 @@ function devmaster_task_finalize() {
   $menu_name = variable_get('menu_primary_links_source', 'primary-links');
 
   // @TODO - seriously need to simplify this, but in our own code i think, not install profile api
-  $items = install_menu_get_items('hosting/projects');
-  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
-  $item['menu_name'] = $menu_name;
-  $item['customized'] = 1;
-  $item['weight'] = 3;
-  $item['options'] = unserialize($item['options']);
-  install_menu_update_menu_item($item);
-
-  $items = install_menu_get_items('hosting/servers');
-  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
-  $item['menu_name'] = $menu_name;
-  $item['customized'] = 1;
-  $item['weight'] = 2;
-  $item['options'] = unserialize($item['options']);
-  install_menu_update_menu_item($item);
-
-  $items = install_menu_get_items('user');
-  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
-  $item['menu_name'] = $menu_name;
-  $item['customized'] = 1;
-  $item['options'] = unserialize($item['options']);
-  install_menu_update_menu_item($item);
-
-  $items = install_menu_get_items('logout');
-  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
-  $item['menu_name'] = $menu_name;
-  $item['customized'] = 1;
-  $item['weight'] = 1;
-  $item['options'] = unserialize($item['options']);
-  install_menu_update_menu_item($item);
+//  $items = install_menu_get_items('hosting/projects');
+//  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
+//  $item['menu_name'] = $menu_name;
+//  $item['customized'] = 1;
+//  $item['weight'] = 3;
+//  $item['options'] = unserialize($item['options']);
+//  install_menu_update_menu_item($item);
+//
+//  $items = install_menu_get_items('hosting/servers');
+//  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
+//  $item['menu_name'] = $menu_name;
+//  $item['customized'] = 1;
+//  $item['weight'] = 2;
+//  $item['options'] = unserialize($item['options']);
+//  install_menu_update_menu_item($item);
+//
+//  $items = install_menu_get_items('user');
+//  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
+//  $item['menu_name'] = $menu_name;
+//  $item['customized'] = 1;
+//  $item['options'] = unserialize($item['options']);
+//  install_menu_update_menu_item($item);
+//
+//  $items = install_menu_get_items('logout');
+//  $item = db_fetch_array(db_query("SELECT * FROM {menu_links} WHERE mlid = %d", $items[0]['mlid']));
+//  $item['menu_name'] = $menu_name;
+//  $item['customized'] = 1;
+//  $item['weight'] = 1;
+//  $item['options'] = unserialize($item['options']);
+//  install_menu_update_menu_item($item);
 
   menu_rebuild();
 
   $theme = 'boots';
   drupal_set_message(st('Enabling "boots" theme'));
-  install_disable_theme('garland');
+  install_disable_theme('bartik');
   install_default_theme('boots');
   system_theme_data();
 
   db_query("DELETE FROM {cache}");
 
   drupal_set_message(st('Configuring default blocks'));
-  install_add_block('devshop_hosting', 'devshop_tasks', $theme, 1, 5, 'header', 1);
+//  install_add_block('devshop_hosting', 'devshop_tasks', $theme, 1, 5, 'header', 1);
 
   // @TODO: CREATE DEVSHOP ROLES!
   drupal_set_message(st('Configuring roles'));
-  install_remove_permissions(install_get_rid('anonymous user'), array('access content', 'access all views'));
-  install_remove_permissions(install_get_rid('authenticated user'), array('access content', 'access all views'));
-  install_add_permissions(install_get_rid('anonymous user'), array('access disabled sites'));
-  install_add_permissions(install_get_rid('authenticated user'), array('access disabled sites'));
+//  install_remove_permissions(install_get_rid('anonymous user'), array('access content', 'access all views'));
+//  install_remove_permissions(install_get_rid('authenticated user'), array('access content', 'access all views'));
+//  install_add_permissions(install_get_rid('anonymous user'), array('access disabled sites'));
+//  install_add_permissions(install_get_rid('authenticated user'), array('access disabled sites'));
 
   // Create administrator role
   $rid = install_add_role('administrator');
