@@ -8,6 +8,17 @@ dependencies[] = help
 dependencies[] = menu
 dependencies[] = dblog
 dependencies[] = toolbar
+;
+;dependencies[] = hosting
+;dependencies[] = hosting_task
+;dependencies[] = hosting_client
+;dependencies[] = hosting_db_server
+;dependencies[] = hosting_package
+;dependencies[] = hosting_platform
+;dependencies[] = hosting_site
+;dependencies[] = hosting_web_server
+;dependencies[] = hosting_server
+;dependencies[] = hosting_alias
 
 ; Drupal Contrib
 dependencies[] = admin_menu
@@ -20,26 +31,16 @@ dependencies[] = actions_permissions
 dependencies[] = adminrole
 dependencies[] = ctools
 
-dependencies[] = hosting
-dependencies[] = hosting_task
-dependencies[] = hosting_client
-dependencies[] = hosting_db_server
-dependencies[] = hosting_package
-dependencies[] = hosting_platform
-dependencies[] = hosting_site
-dependencies[] = hosting_web_server
-dependencies[] = hosting_server
-dependencies[] = hosting_alias
 
-dependencies[] = devshop_hosting
-dependencies[] = devshop_projects
-dependencies[] = devshop_log
-dependencies[] = devshop_pull
-
-dependencies[] = hosting_filemanager
-dependencies[] = hosting_tasks_extra
-dependencies[] = hosting_server
-dependencies[] = hosting_alias
+;dependencies[] = devshop_hosting
+;dependencies[] = devshop_projects
+;dependencies[] = devshop_log
+;dependencies[] = devshop_pull
+;
+;dependencies[] = hosting_filemanager
+;dependencies[] = hosting_tasks_extra
+;dependencies[] = hosting_server
+;dependencies[] = hosting_alias
 
 ;dependencies[] = hosting_queued
 ;dependencies[] = hosting_http_basic_auth
