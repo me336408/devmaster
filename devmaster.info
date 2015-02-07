@@ -1,0 +1,51 @@
+name = DevShop Devmaster
+description = Front-end for DevShop
+core = 7.x
+
+; Drupal Core
+dependencies[] = block
+dependencies[] = help
+dependencies[] = menu
+dependencies[] = dblog
+dependencies[] = toolbar
+
+; Drupal Contrib
+dependencies[] = admin_menu
+dependencies[] = betterlogin
+dependencies[] = overlay_paths
+dependencies[] = views
+dependencies[] = views_bulk_operations
+dependencies[] = actions_permissions
+dependencies[] = adminrole
+dependencies[] = ctools
+
+dependencies[] = hosting
+dependencies[] = hosting_task
+dependencies[] = hosting_client
+dependencies[] = hosting_db_server
+dependencies[] = hosting_package
+dependencies[] = hosting_platform
+dependencies[] = hosting_site
+dependencies[] = hosting_web_server
+dependencies[] = hosting_server
+dependencies[] = hosting_alias
+
+dependencies[] = devshop_hosting
+dependencies[] = devshop_projects
+dependencies[] = devshop_log
+dependencies[] = devshop_pull
+
+dependencies[] = hosting_filemanager
+dependencies[] = hosting_tasks_extra
+dependencies[] = hosting_server
+dependencies[] = hosting_alias
+
+;dependencies[] = hosting_queued
+;dependencies[] = hosting_http_basic_auth
+;dependencies[] = hosting_sync',
+
+;; Enable some dev modules during the 7.x-3.x dev cycle.
+dependencies[] = views_ui
+dependencies[] = dblog
+dependencies[] = devel
+dependencies[] = devel_debug_log
